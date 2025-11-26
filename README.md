@@ -12,7 +12,7 @@ npm install
 FIGMA_TOKEN=your_figma_token_here
 ```
 
-3. Create a folder named `scratch`: This will store the generated `scratch/index.html` and `scratch/styles.css` files (and the file.json file to avoid repeated API calls).
+3. Create a folder named `scratch`: This will store the generated `scratch/index.html` and `scratch/styles.css` files (and the `file.json` file to avoid repeated API calls).
 
 ### How to Run
 
