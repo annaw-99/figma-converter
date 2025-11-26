@@ -7,7 +7,7 @@
 npm install
 ```
 
-2. Create a `.env` file with your Figma API token:
+2. Create a `.env` file with your Figma API token (requires files scope).
 ```
 FIGMA_TOKEN=your_figma_token_here
 ```
