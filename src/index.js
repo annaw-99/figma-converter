@@ -1,7 +1,7 @@
 require('dotenv').config();
 const fs = require("fs");
 const saveJson = require("./saveJson");
-const convertToHtml = require("./convert");
+const convert = require("./convert");
 
 const FIGMA_API_URL = "https://api.figma.com/v1";
 const input = process.argv[2];
@@ -18,16 +18,6 @@ function extractKey(str) {
 
 const fileKey = extractKey(input);
 
-function getPage(data) {
-    const pages = data.document.children;
-    if (!pages || pages.length === 0) return null;
-
-    const firstPage = pages[0];
-    const nodes = firstPage.children || [];
-
-    return nodes.find(n => n.type === "FRAME") || null;
-}
-
 function loadCache() {
     if (!fs.existsSync("scratch/file.json")) return null;
     return JSON.parse(fs.readFileSync("scratch/file.json", "utf8"));
@@ -36,7 +26,7 @@ function loadCache() {
 async function fetchFile(key) {
     let data = loadCache();
     if (data) {
-        console.log("Using", data.name);
+        console.log("Using Cached File");
     } else {
         const res = await fetch(`${FIGMA_API_URL}/files/${key}`, {
             headers: {
@@ -54,14 +44,9 @@ async function fetchFile(key) {
         saveJson(data);
     }
 
-    const root = getPage(data);  
-    if (!root) {
-        console.error("No Page found.");
-        process.exit(1);
-    }
-
-    const html = convertToHtml(root);
+    const { html, css } = convert(data.document);
     fs.writeFileSync("scratch/index.html", html);
+    fs.writeFileSync("scratch/styles.css", css);
 }
 
 fetchFile(fileKey);
